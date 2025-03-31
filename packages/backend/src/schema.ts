@@ -1,5 +1,6 @@
-import { createSchema } from 'graphql-yoga';
-import { InputValidationSchema } from '@shared/schemas.js';
+import { createGraphQLError, createSchema } from 'graphql-yoga';
+import { InputValidationSchema } from '@shared/schemas';
+import { analyzeWithHF } from './huggingface';
 
 export const schema = createSchema({
   typeDefs: /* GraphQL */ `
@@ -7,39 +8,30 @@ export const schema = createSchema({
       content: String!
     }
 
-    type ValidationResult {
-      valid: Boolean!
-      errors: [String!]
-    }
-
     type Query {
       hello: String!
     }
 
+    type SentimentResult {
+      label: String!
+      score: Float!
+    }
+
     type Mutation {
-      validateInput(input: TextInput!): ValidationResult!
+      analyzeSentiment(input: TextInput!): SentimentResult!
     }
   `,
   resolvers: {
-    Query: {
-      hello: () => 'Welcome to the text validation API!',
-    },
     Mutation: {
-      validateInput: (_, { input }) => {
-        // Using Zod schema for input validation
-        const result = InputValidationSchema.safeParse(input.content);
+      analyzeSentiment: async (_, { input }) => {
+        const inputValidation = InputValidationSchema.safeParse(input.content);
 
-        if (result.success) {
-          return {
-            valid: true,
-            errors: null,
-          };
-        } else {
-          return {
-            valid: false,
-            errors: result.error.errors.map((err) => err.message),
-          };
+        if (!inputValidation.success) {
+          throw createGraphQLError('Invalid input');
         }
+
+        const sentiment = await analyzeWithHF(input.content);
+        return sentiment;
       },
     },
   },
