@@ -28,7 +28,7 @@ export default tseslint.config(
       globals: globals.browser,
       parser: tseslint.parser,
       parserOptions: {
-        project: resolve(rootDir, './tsconfig.eslint.json'),
+        frontend: resolve(rootDir, 'packages', 'frontend', 'tsconfig.eslint.json'),
         tsconfigRootDir: rootDir,
       },
     },

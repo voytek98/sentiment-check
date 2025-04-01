@@ -15,10 +15,15 @@ export async function analyzeWithHF(text: string): Promise<HFPrediction> {
     },
   );
 
+  // Check if response is OK
+  if (!res.ok) {
+    throw new Error(`API Error: ${res.status} ${res.statusText}`);
+  }
+
   const data = await res.json();
 
   if (!Array.isArray(data)) {
-    throw new Error('Unexpected response from Hugging Face');
+    throw new Error('Unexpected response format from Hugging Face');
   }
 
   const predictions: HFResponse = data[0];

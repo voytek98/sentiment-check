@@ -1,4 +1,9 @@
+export enum SentimentLabel {
+  POSITIVE = 'POSITIVE',
+  NEGATIVE = 'NEGATIVE',
+}
+
 export type HFPrediction = {
-  label: 'POSITIVE' | 'NEGATIVE';
+  label: SentimentLabel;
   score: number;
 };
