@@ -1,3 +1,4 @@
+import { resolve } from 'path';
 import js from '@eslint/js';
 import globals from 'globals';
 import reactHooks from 'eslint-plugin-react-hooks';
@@ -6,14 +7,30 @@ import tseslint from 'typescript-eslint';
 import prettierPlugin from 'eslint-plugin-prettier';
 import prettierConfig from 'eslint-config-prettier';
 
+const rootDir = process.cwd();
+
 export default tseslint.config(
-  { ignores: ['dist'] },
+  { ignores: ['**/dist/**', '**/node_modules/**', '.git/**', '**/gql/**', '**/generated/**'] },
+  prettierConfig,
+  {
+    extends: [js.configs.recommended],
+    files: ['**/*.{js,mjs}'],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: 'module',
+    },
+  },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
-      ecmaVersion: 2020,
+      ecmaVersion: 2022,
       globals: globals.browser,
+      parser: tseslint.parser,
+      parserOptions: {
+        project: resolve(rootDir, './tsconfig.eslint.json'),
+        tsconfigRootDir: rootDir,
+      },
     },
     plugins: {
       'react-hooks': reactHooks,
@@ -23,8 +40,13 @@ export default tseslint.config(
     rules: {
       ...reactHooks.configs.recommended.rules,
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
-      'prettier/prettier': 'error',
+      'prettier/prettier': [
+        'error',
+        {
+          endOfLine: 'auto',
+        },
+        { usePrettierrc: true },
+      ],
     },
   },
-  prettierConfig,
 );
