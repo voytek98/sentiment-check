@@ -36,6 +36,7 @@ export const SentimentResultModal = ({
             </Title>
           }
           subTitle={error?.message || 'Something went wrong during sentiment analysis.'}
+          style={{ padding: 0 }}
           extra={
             <Button type="primary" onClick={onTryAgain}>
               Try Again
@@ -53,6 +54,7 @@ export const SentimentResultModal = ({
           status={analysis.status}
           title={`Sentiment: ${sentimentResult.label.charAt(0).toUpperCase() + sentimentResult.label.slice(1)}`}
           subTitle={`Score: ${sentimentResult.score.toFixed(2)}`}
+          style={{ padding: 0 }}
           extra={
             <Button type="primary" onClick={onAnalyzeAnother}>
               Analyze Another Text

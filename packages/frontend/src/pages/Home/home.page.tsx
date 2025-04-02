@@ -1,10 +1,9 @@
 import { Layout, theme } from 'antd';
-import { SentimentAnalyzer } from './components';
-import './App.css';
+import { SentimentAnalyzer } from '../../components';
 
 const { Content } = Layout;
 
-function App() {
+function Home() {
   const { token } = theme.useToken();
 
   return (
@@ -16,7 +15,7 @@ function App() {
           width: 1280,
           maxWidth: '100%',
           margin: '0 auto',
-          padding: '20px 0',
+          padding: 20,
         }}
       >
         <SentimentAnalyzer />
@@ -25,4 +24,4 @@ function App() {
   );
 }
 
-export default App;
+export default Home;

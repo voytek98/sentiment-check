@@ -88,7 +88,7 @@ export const SentimentAnalyzer = () => {
             value={inputText}
             onChange={handleInputChange}
             placeholder="Type your text here..."
-            autoSize={{ minRows: 5, maxRows: 8 }}
+            autoSize={{ minRows: 8, maxRows: 14 }}
             status={validationError ? 'error' : ''}
             disabled={isPending}
             style={{ borderRadius: token.borderRadius }}
