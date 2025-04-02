@@ -2,7 +2,7 @@ import { ResultStatusType } from 'antd/es/result';
 import { SentimentResult } from '../gql/graphql';
 import { SentimentLabel } from '@shared/types';
 
-const sentimentClassification = {
+export const sentimentClassification = {
   [SentimentLabel.POSITIVE]: {
     0.9: {
       label: 'Extremely Positive',
@@ -39,13 +39,19 @@ const sentimentClassification = {
   },
 } as const;
 
+export const neutralClassification = {
+  label: 'Neutral',
+  description: 'The sentiment is relatively neutral.',
+  tip: 'Consider using more expressive language to convey a clearer sentiment.',
+};
+
 const isSentimentLabel = (label: SentimentResult['label']): label is SentimentLabel => {
   return Object.values(SentimentLabel).includes(label as SentimentLabel);
 };
 
 const getStatus = (label: SentimentResult['label'], score: SentimentResult['score']): ResultStatusType => {
-  if (label === SentimentLabel.POSITIVE) return score >= 0.6 ? 'success' : 'warning';
-  if (label === SentimentLabel.NEGATIVE) return score >= 0.6 ? 'error' : 'warning';
+  if (label === SentimentLabel.POSITIVE) return score >= 0.8 ? 'success' : 'warning';
+  if (label === SentimentLabel.NEGATIVE) return score >= 0.8 ? 'error' : 'warning';
   return 'info';
 };
 
@@ -65,11 +71,7 @@ const getSentimentDetails = (label: SentimentResult['label'], score: SentimentRe
     }
   }
 
-  return {
-    label: 'Neutral',
-    description: 'The sentiment is relatively neutral.',
-    tip: 'Consider using more expressive language to convey a clearer sentiment.',
-  };
+  return neutralClassification;
 };
 
 export const analyzeSentimentResult = (result: SentimentResult) => {

@@ -2,7 +2,7 @@ import { Button, Modal, Result, Space, Typography } from 'antd';
 import { AnalyzeSentimentMutation } from '../../gql/graphql';
 import { analyzeSentimentResult } from '../../utils/sentimentAnalyzer.utils';
 
-const { Paragraph } = Typography;
+const { Paragraph, Title } = Typography;
 
 interface SentimentResultModalProps {
   isVisible: boolean;
@@ -30,7 +30,11 @@ export const SentimentResultModal = ({
       return (
         <Result
           status="error"
-          title="Analysis Failed"
+          title={
+            <Title level={3} role="heading">
+              Analysis Failed
+            </Title>
+          }
           subTitle={error?.message || 'Something went wrong during sentiment analysis.'}
           extra={
             <Button type="primary" onClick={onTryAgain}>
