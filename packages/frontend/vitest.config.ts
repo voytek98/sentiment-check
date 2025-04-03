@@ -10,10 +10,17 @@ export default defineConfig({
     setupFiles: ['./src/test/setup.ts'],
     include: ['src/**/*.{test,spec}.{ts,tsx}'],
     coverage: {
-      enabled: true,
       reporter: ['text', 'json', 'html'],
       include: ['src/**/*.{ts,tsx}'],
-      exclude: ['src/**/*.{test,spec}.{ts,tsx}', 'src/gql/**', 'src/vite-env.d.ts', 'src/main.tsx'],
+      exclude: [
+        'src/**/*.{test,spec}.{ts,tsx}',
+        'src/gql/**',
+        'src/vite-env.d.ts',
+        'src/main.tsx',
+        'src/**/index.ts',
+        'src/api/client.ts',
+        'src/test/test-utils.tsx',
+      ],
     },
   },
   resolve: {
