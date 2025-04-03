@@ -3,6 +3,9 @@ import { render, screen, fireEvent, waitFor } from '../../test/test-utils';
 import { SentimentAnalyzer } from './sentimentAnalyzer.component';
 import { useSentiment } from '../../hooks/useSentiment';
 import { SentimentLabel } from '@shared/types';
+import { InputValidationSchema } from '@shared/schemas';
+
+const maxLength = InputValidationSchema.maxLength || 500;
 
 vi.mock('../../hooks/useSentiment', () => ({
   useSentiment: vi.fn(),
@@ -68,14 +71,14 @@ describe('SentimentAnalyzer', () => {
 
   it('should show validation error for input that is too long', () => {
     render(<SentimentAnalyzer />);
-    const tooLongText = 'x'.repeat(501);
+    const tooLongText = 'x'.repeat(maxLength + 1);
     const textarea = screen.getByPlaceholderText(/type your text here/i);
     const button = screen.getByRole('button', { name: /analyze sentiment/i });
 
     fireEvent.change(textarea, { target: { value: tooLongText } });
     fireEvent.click(button);
 
-    expect(screen.getByText('Input cannot exceed 500 characters')).toBeInTheDocument();
+    expect(screen.getByText(`Input cannot exceed ${maxLength} characters`)).toBeInTheDocument();
   });
 
   it('should show loading state during analysis', () => {
